@@ -1,12 +1,13 @@
 
 ## 使用方式:
 
-git clone https://github.com/rookiesmile/yibanAutoSgin.git
+```git clone https://github.com/rookiesmile/yibanAutoSgin.git```
 
-pip install requests
+```pip install requests```
 
-python main.py
+```python main.py```
 
+- - - 
 
 ## 目录说明: 
 
