@@ -33,3 +33,11 @@
         里面有的邮箱地址需要自己填写，为send_mail函数
     yiban.py;
         ....
+        
+        
+
+- - -
+
+参考: 
+
+ [https://github.com/looyeagee/yiban_auto_submit](https://github.com/looyeagee/yiban_auto_submit)
