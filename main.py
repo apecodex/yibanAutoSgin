@@ -44,7 +44,7 @@ for ac in account:
                         print("授权失败！")
                     auto = yiban.auto()
                 if auto["code"] == 0:
-                    allList = yiban.getUncompletedList()
+                    allList = yiban.getUncompletedListTime()
                     if (allList["code"] == 0 and allList["data"] != []):
                         today_taskID = allList["data"][-1]["TaskId"]
                         detail = yiban.getDetail(today_taskID)
@@ -73,37 +73,37 @@ for ac in account:
                         if sb["code"] == 0 and night_s["code"] == 0:
                             print("签到和表单提交成功!")
                             share_url = yiban.getShareUrl(sb["data"])["data"]["uri"]
-
+                        
                             email_str = util.html_format(
                                 time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))),
                                 "签到和表单提交成功",
                                 share_url, json.loads(reason)["Address"])
-
+                        
                             util.log(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(
                                 int(time.time()))) + " 签到和表单提交成功 url: " + share_url + "\n")
-
+                        
                             util.send_mail(email_str)
                         elif sb["code"] == 0 and night_s["code"] != 0:
                             print("表单提交成功!但是签到没成功")
                             share_url = yiban.getShareUrl(sb["data"])["data"]["uri"]
-
+                        
                             email_str = util.html_format(
                                 time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))),
                                 "表单提交成功!但是签到没成功!",
                                 share_url, "签到没成功")
-
+                        
                             util.log(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(
                                 int(time.time()))) + " 表单提交成功!但是签到没成功 url: " + share_url + "\n")
-
+                        
                             util.send_mail(email_str)
                         elif sb["code"] != 0 and night_s["code"] == 0:
                             print("签到提交成功!但是表单没成功")
-
+                        
                             email_str = util.html_format(
                                 time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))),
                                 "签到提交成功!但是表单没成功!",
                                 "表单没成功", json.loads(reason)["Address"])
-
+                        
                             util.log(
                                 time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) + " 签到提交成功!但是表单没成功")
                             util.send_mail(email_str)
