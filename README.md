@@ -37,7 +37,3 @@
         
 
 - - -
-
-参考: 
-
- [https://github.com/looyeagee/yiban_auto_submit](https://github.com/looyeagee/yiban_auto_submit)
