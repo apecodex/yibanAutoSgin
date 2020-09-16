@@ -47,13 +47,13 @@ def send_mail(message):
     try:
         host_server = 'smtp.qq.com'
         # 发件人的邮箱
-        sender_qq = '123@qq.com'
+        sender_qq = 'apecode@qq.com'
         # 邮箱的授权码
-        pwd = ''
+        pwd = 'brwbbeonospkibga'
         # 发件人的邮箱
-        sender_qq_mail = '123@qq.com'
+        sender_qq_mail = 'apecode@qq.com'
         # 收件人邮箱
-        receiver = ''
+        receiver = 'apecode@126.com'
         # 邮件的正文内容
         mail_content = message
         # 邮件标题
@@ -111,3 +111,21 @@ def html_format(date, postContext, url, signStr) -> str:
         </html>
     """ % (date, postContext, url, url, signStr)
     return html
+
+def GenerateNowTime() -> str:
+    dayTime = int(time.mktime(time.strptime(time.strftime("%Y-%m-%d 9:00:00", time.localtime(
+                                int(time.time()))), '%Y-%m-%d %H:%M:%S')))
+    nowTime = int(time.time())
+    if nowTime > dayTime:
+        dayTime = int(time.mktime(time.strptime(time.strftime("%Y-%m-%d 14:30:00", time.localtime(
+                        int(time.time()))), '%Y-%m-%d %H:%M:%S')))
+        if nowTime > dayTime:
+            dayTime = int(time.mktime(time.strptime(time.strftime("%Y-%m-%d 19:30:00", time.localtime(
+                        int(time.time()))), '%Y-%m-%d %H:%M:%S')))
+        else:
+            dayTime = int(time.mktime(time.strptime(time.strftime("%Y-%m-%d 12:00:00", time.localtime(
+                        int(time.time()))), '%Y-%m-%d %H:%M:%S')))
+    else:
+        dayTime = int(time.mktime(time.strptime(time.strftime("%Y-%m-%d 06:30:00", time.localtime(
+                        int(time.time()))), '%Y-%m-%d %H:%M:%S')))
+    return dayTime
