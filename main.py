@@ -21,7 +21,7 @@ account = json.loads(util.readAccount()[0])
 flag = False
 
 for ac in account:
-    yiban = Yiban(account[0], account[1])
+    yiban = Yiban(ac, account[ac])
     while login_times <= 5:
         try:
             login = yiban.login()
