@@ -6,32 +6,36 @@
 @Software  ： PyCharm
 @Blog ： https://liuyangxiong.cn
 """
-import json
+
 import time
 from email.mime.text import MIMEText
 from email.header import Header
 from smtplib import SMTP_SSL
 
-
+# 获取所有账号
 def readAccount() -> str:
     with open("data/account.txt", encoding="utf-8") as f:
-        reason = f.read().splitlines();
+        reason = f.read().splitlines()
     return reason
 
+# 写入把签到的结果log.txt
 def log(message):
     with open("data/log.txt", "a+") as w:
         w.write(message)
 
+# 获取位置签到数据
 def getReason():
     with open("data/nightSign.txt", encoding="utf-8") as f:
         reason = f.read().splitlines()
     return reason
 
+# 获取表单数据
 def readTaskForm():
     with open("data/taskForm.txt", encoding="utf-8") as r:
         data = r.read().splitlines()
     return data
 
+# 写入表单数据
 def writerTaskFrom(form_data):
     with open("data/taskForm.txt", 'w') as w:
         w.write(str(form_data).replace(" ", "").replace("'", "\""))
@@ -47,13 +51,13 @@ def send_mail(message):
     try:
         host_server = 'smtp.qq.com'
         # 发件人的邮箱
-        sender_qq = 'apecode@qq.com'
+        sender_qq = 'xxx@qq.com'
         # 邮箱的授权码
-        pwd = 'brwbbeonospkibga'
+        pwd = 'xxxxxxxxxxxxx'
         # 发件人的邮箱
-        sender_qq_mail = 'apecode@qq.com'
+        sender_qq_mail = 'xxx@qq.com'
         # 收件人邮箱
-        receiver = 'apecode@126.com'
+        receiver = 'xxx@qq.com'
         # 邮件的正文内容
         mail_content = message
         # 邮件标题
@@ -112,6 +116,7 @@ def html_format(date, postContext, url, signStr) -> str:
     """ % (date, postContext, url, url, signStr)
     return html
 
+# 根据当前时间判断晨检、午检、晚检
 def GenerateNowTime() -> str:
     dayTime = int(time.mktime(time.strptime(time.strftime("%Y-%m-%d 9:00:00", time.localtime(
                                 int(time.time()))), '%Y-%m-%d %H:%M:%S')))
@@ -129,3 +134,17 @@ def GenerateNowTime() -> str:
         dayTime = int(time.mktime(time.strptime(time.strftime("%Y-%m-%d 06:30:00", time.localtime(
                         int(time.time()))), '%Y-%m-%d %H:%M:%S')))
     return dayTime
+
+def when_time():
+    dayTime = int(time.mktime(time.strptime(time.strftime("%Y-%m-%d 9:00:00", time.localtime(
+                                int(time.time()))), '%Y-%m-%d %H:%M:%S')))
+    nowTime = int(time.time())
+    if nowTime > dayTime:
+        dayTime = int(time.mktime(time.strptime(time.strftime("%Y-%m-%d 14:30:00", time.localtime(
+                        int(time.time()))), '%Y-%m-%d %H:%M:%S')))
+        if nowTime > dayTime:
+            return 2   # 表示 晚检
+        else:
+            return 1   # 表示 午检
+    else:
+        return 0   # 表示 晨检
