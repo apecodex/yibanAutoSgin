@@ -88,6 +88,8 @@ for ac in account:
                                 yiban.deviceState()
                                 yiban.sginPostion()
                                 night_s = yiban.nightAttendance(reason)   # 提交位置签到
+                            else:
+                                night_s = None
 
                             if sb is not None:
                                 if sb["code"] == 0 and night_s["code"] == 0:
@@ -131,20 +133,21 @@ for ac in account:
                                     print("都没有成功!")
                                     util.send_mail("提交失败!")
                             else:
-                                if night_s['code'] == 0:
-                                    print("签到提交成功!但是表单没成功")
-                                    email_str = util.html_format(
-                                        time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))),
-                                        "签到提交成功!但是表单没成功!",
-                                        "表单没成功", json.loads(reason)["Address"])
-
-                                    util.log(
-                                        time.strftime("%Y-%m-%d %H:%M:%S",
-                                                      time.localtime(int(time.time()))) + " 签到提交成功!但是表单没成功")
-                                    util.send_mail(email_str)
-                                else:
-                                    print("签到没有成功!")
-                                    util.send_mail("签到提交失败!")
+                                if night_s != None: 
+                                    if night_s['code'] == 0:
+                                        print("签到提交成功!但是表单没成功")
+                                        email_str = util.html_format(
+                                            time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))),
+                                            "签到提交成功!但是表单没成功!",
+                                            "表单没成功", json.loads(reason)["Address"])
+    
+                                        util.log(
+                                            time.strftime("%Y-%m-%d %H:%M:%S",
+                                                          time.localtime(int(time.time()))) + " 签到提交成功!但是表单没成功")
+                                        util.send_mail(email_str)
+                                    else:
+                                        print("签到没有成功!")
+                                        util.send_mail("签到提交失败!")
                         else:
                             print("没有可提交的表单!")
                             util.send_mail("没有可提交的表单!")
