@@ -20,7 +20,7 @@ def readAccount() -> str:
 
 # 写入把签到的结果log.txt
 def log(message):
-    with open("data/log.txt", "a+") as w:
+    with open("data/log.txt", "a+", encoding="utf-8") as w:
         w.write(message)
 
 # 获取位置签到数据
