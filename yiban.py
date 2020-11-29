@@ -15,15 +15,16 @@ import util
 
 
 class Yiban:
-    CSRF = "9cd990dfd520072e0ee032c46df5f99e"
+    CSRF = "64b5c616dc98779ee59733e63de00dd5"
     COOKIES = {"csrf_token": CSRF}
     HEADERS = {"Origin": "https://c.uyiban.com", "User-Agent": "yiban"}
     EMAIL = {}
 
-    def __init__(self, account, passwd):
-        self.account = account
-        self.passwd = passwd
+    def __init__(self, mobile, password):
+        self.mobile = mobile
+        self.password = password
         self.session = requests.session()
+        self.name = ""
 
     def request(self, url, method="get", params=None, cookies=None):
         if method == "get":
@@ -39,25 +40,19 @@ class Yiban:
         :return:
         """
         params = {
-            "account": self.account,
-            "passwd": self.passwd,
-            "ct": 2,
-            "app": 1,
-            "v": "4.7.11",
-            "apn": "ctnet",
-            "identify": "0",
+            "mobile": self.mobile,
+            "password": self.password,
+            "imei": "0",
         }
-
-        response = self.request("https://mobile.yiban.cn/api/v2/passport/login", params=params, cookies=self.COOKIES)
-
-        if response is not None and response["response"] == "100":
-            self.access_token = response["data"]["access_token"]
-            self.name = response["data"]["user"]["name"]
+        # 新的登录接口
+        response = self.request("https://mobile.yiban.cn/api/v3/passport/login", params=params, cookies=self.COOKIES)
+        if response is not None and response["response"] == 100:
+            self.access_token = response["data"]["user"]["access_token"]
             return response
         else:
             return response
 
-    def auto(self) -> json:
+    def auth(self) -> json:
         """
         登录验证
         :return:
@@ -65,9 +60,11 @@ class Yiban:
         location = self.session.get("http://f.yiban.cn/iapp/index?act=iapp7463&v=" + self.access_token,
                                     allow_redirects=False).headers["Location"]
         verifyRequest = re.findall(r"verify_request=(.*?)&", location)[0]
-        return self.request(
+        response = self.request(
             "https://api.uyiban.com/base/c/auth/yiban?verifyRequest=" + verifyRequest + "&CSRF=" + self.CSRF,
             cookies=self.COOKIES)
+        self.name = response["data"]["PersonName"]
+        return response
 
     def getUncompletedList(self) -> json:
         """
@@ -83,7 +80,11 @@ class Yiban:
         获取特定时间未完成的表单
         :return:
         """
-        response = self.request("https://api.uyiban.com/officeTask/client/index/uncompletedList?StartTime=2020-08-31 00:00&EndTime="+time.strftime("%Y-%m-%d 23:59:00", time.localtime(int(time.time())))+"&CSRF=" + self.CSRF,
+
+        start_time = time.strftime("%Y-%m-%d 00:00")
+        end_time = time.strftime("%Y-%m-%d 23:59:00", time.localtime(int(time.time())))
+
+        response = self.request("https://api.uyiban.com/officeTask/client/index/uncompletedList?StartTime="+start_time+"&EndTime="+end_time+"&CSRF=" + self.CSRF,
                                 cookies=self.COOKIES)
         return response
 
@@ -116,6 +117,7 @@ class Yiban:
         """
         首次使用,需要创建提交表单用的数据
         此方法是用来创建表单数据的
+        *** 已作废！ ***
         :return:
         """
         form_data = {}
@@ -169,7 +171,7 @@ class Yiban:
         :return: 表单url
         """
         params = {
-            "data": data,
+            "data": json.dumps(data, ensure_ascii=False),
             "extend": json.dumps(extend, ensure_ascii=False)
         }
         return self.request(
