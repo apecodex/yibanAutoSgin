@@ -52,28 +52,24 @@ for ac in account:
                         "0596b8e5dab5bbc35daea35e46a2fbfa": "好"
                     }
 
-
                     # 位置
-                    night_sgin = {"Reason": "",
-                                  "AttachmentFileName": "",
-                                  "LngLat": "102.449018,24.875743",
-                                  "Address": "云南省 昆明市 安宁市 县街街道 昆明冶金高等专科学校-教学大楼"
-                              }
-                    # 提交表单
-                    sb_result = yiban.submitApply(task, extend)
 
+                    night_sgin = '{"Reason":"","AttachmentFileName":"","LngLat":"102.449018,24.875743","Address":"云南省 昆明市 安宁市县街街道昆明冶金高等专科学校-教学大楼 "}'
+
+                    # # 提交表单
+                    sb_result = yiban.submitApply(task, extend)
                     # 位置签到
                     yiban.photoRequirements()
                     yiban.deviceState()
                     yiban.sginPostion()
                     ns_result = yiban.nightAttendance(night_sgin)
                     # print(sb_result)
-                    # print(ns_result)
+                    print(ns_result)
                     if sb_result["code"] == 0 and ns_result["code"] == 0:
                         print("表单和位置签到提交成功！")
                         share_url = yiban.getShareUrl(sb_result["data"])["data"]["uri"]
                         util.log(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) +
-                                 " 表单和位置签到提交成功 url: " + share_url + " 位置: " + night_sgin["Address"] + "\n")
+                                 " 表单和位置签到提交成功 url: " + share_url + " 位置: " + json.loads(night_sgin)["Address"] + "\n")
                     elif sb_result["code"] == 0 and ns_result["code"] != 0:
                         print("表单提交成功！")
                         share_url = yiban.getShareUrl(sb_result["data"])["data"]["uri"]
@@ -82,7 +78,7 @@ for ac in account:
                     elif sb_result["code"] != 0 and ns_result["code"] == 0:
                         print("位置签到提交成功！")
                         util.log(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) +
-                                 " 位置: " + night_sgin["Address"] + "\n")
+                                 " 位置: " + json.loads(night_sgin)["Address"] + "\n")
                     else:
                         print("失败！")
 
