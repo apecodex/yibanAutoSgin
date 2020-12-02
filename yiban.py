@@ -156,6 +156,7 @@ class Yiban:
         """
         params = {
             "Code": "",
+            "PhoneModel": "",
             "SignInfo": reason,
             "OutState": "1"
         }
