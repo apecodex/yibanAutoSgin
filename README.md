@@ -22,7 +22,7 @@ https://apecodewx.gitee.io/sixuetang/how
 
 ### 运行方式
 
-1. 手机上可以下载`Termux`这款软件，配置好之后，把代码copy下来，就可以中手机上运行签到了
+1. 手机上可以下载`Termux`这款软件，配置好之后，把代码copy下来，就可以在手机上运行签到了
 2. 租服务器
 - - -
 
