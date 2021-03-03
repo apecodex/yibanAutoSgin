@@ -44,8 +44,17 @@ for ac in account:
                         ]
                     }
 
+                    # 假期表单
+#                     task = {
+#                         "55e9aaf31b36aada75e4aa84f28827a4": str(round(random.uniform(36.1, 36.9), 1)),
+#                         "8e62115236c4ec05c45daff18a6b0e1c": ["以上都无"],
+#                         "0596b8e5dab5bbc35daea35e46a2fbfa": "好"
+#                     }
+
                     # 最新表单，体温36.1~36.9随机
+                    # 学校表单
                     task = {
+                        "6a2c48587652c472b625d612c03831eb": "是",
                         "55e9aaf31b36aada75e4aa84f28827a4": str(round(random.uniform(36.1, 36.9), 1)),
                         "8e62115236c4ec05c45daff18a6b0e1c": ["以上都无"],
                         "0596b8e5dab5bbc35daea35e46a2fbfa": "好"
