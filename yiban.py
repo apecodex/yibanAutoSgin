@@ -17,7 +17,7 @@ import util
 class Yiban:
     CSRF = "64b5c616dc98779ee59733e63de00dd5"
     COOKIES = {"csrf_token": CSRF}
-    HEADERS = {"Origin": "https://c.uyiban.com", "User-Agent": "yiban"}
+    HEADERS = {"Origin": "https://c.uyiban.com", "User-Agent": "YiBan"}
     EMAIL = {}
 
     def __init__(self, mobile, password):
@@ -48,6 +48,9 @@ class Yiban:
         response = self.request("https://mobile.yiban.cn/api/v3/passport/login", params=params, cookies=self.COOKIES)
         if response is not None and response["response"] == 100:
             self.access_token = response["data"]["user"]["access_token"]
+            self.HEADERS["Authorization"] = "Bearer " + self.access_token
+            # 增加cookie
+            self.COOKIES["loginToken"] = self.access_token
             return response
         else:
             return response
@@ -57,9 +60,11 @@ class Yiban:
         登录验证
         :return:
         """
-        location = self.session.get("http://f.yiban.cn/iapp/index?act=iapp7463&v=" + self.access_token,
-                                    allow_redirects=False).headers["Location"]
-        verifyRequest = re.findall(r"verify_request=(.*?)&", location)[0]
+        location = self.session.get("http://f.yiban.cn/iapp7463?access_token=" + self.access_token + "&v_time=" + str(int(round(time.time() * 100000))),
+                                    allow_redirects=False, cookies=self.COOKIES)
+        # 二次重定向
+        act = self.session.get("https://f.yiban.cn/iapp/index?act=iapp7463", allow_redirects=False, cookies=self.COOKIES).headers["Location"]
+        verifyRequest = re.findall(r"verify_request=(.*?)&", act)[0]
         response = self.request(
             "https://api.uyiban.com/base/c/auth/yiban?verifyRequest=" + verifyRequest + "&CSRF=" + self.CSRF,
             cookies=self.COOKIES)
