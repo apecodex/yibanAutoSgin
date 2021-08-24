@@ -18,11 +18,11 @@ from notice import Notice
 # ===========================================================
 # Github actions | git clone使用请注释
 try:
-    config.account[0]["mobile"] = os.environ["yb_mobile"]
-    config.account[0]["password"] = os.environ["yb_password"]
-    config.account[0]["mail"] = os.environ["yb_mail"]
-    config.account[0]["pushToken"] = os.environ["yb_pushToken"]
-    config.account[0]["notice"] = os.environ["yb_notice"]
+    config.account[0]["mobile"] = os.environ["YB_MOBILE"]
+    config.account[0]["password"] = os.environ["YB_PASSWORD"]
+    config.account[0]["mail"] = os.environ["YB_MAIL"]
+    config.account[0]["pushToken"] = os.environ["YB_PUSHTOKEN"]
+    config.account[0]["notice"] = os.environ["YB_NOTICE"]
 except KeyError:
     pass
 # # ===========================================================
