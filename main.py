@@ -17,14 +17,14 @@ from notice import Notice
 
 for ac in config.account:
     yb = Yiban(ac.get("mobile"), ac.get("password"))
-    login = yb.login()
-    if (login["response"]) != 100:
-        print(login["message"])
-    else:
-        auth = yb.auth()
-        if auth["code"] == 0:
-            nowPeriod = util.getTimePeriod()    # 获取签到时段数值
-            if nowPeriod != 0:
+    nowPeriod = util.getTimePeriod()  # 获取签到时段数值
+    if nowPeriod != 0:
+        login = yb.login()
+        if (login["response"]) != 100:
+            print(login["message"])
+        else:
+            auth = yb.auth()
+            if auth["code"] == 0:
                 timePeriod = util.fromIntGetTimePeriod(nowPeriod)
                 now_task = yb.getUncompletedListTime(timePeriod[0], timePeriod[1])
                 if not len(now_task["data"]):
@@ -47,10 +47,10 @@ for ac in config.account:
                     if nowPeriod != 3:
                         if sb_result["code"] == 0:
                             share_url = yb.getShareUrl(sb_result["data"])["data"]["uri"]
-                            notice.send(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) +
-                                          " 表单提交成功 url: " + share_url + "\n")
+                            result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) + " 表单提交成功 url: " + share_url + "\n"
+                            notice.send(result)
                         else:
-                            result = "%Y-%m-%d %H:%M:%S", time.localtime(int(time.time())) + "表单提交失败！请检查\n"
+                            result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time())) + "表单提交失败！请检查\n")
                             notice.send(time.strftime(result))
                             Notice.log(result)
                     else:
@@ -71,9 +71,9 @@ for ac in config.account:
                             result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) +" 位置: " + json.loads(config.address)["Address"] + "\n"
                             notice.send(result)
                         else:
-                            notice.send("签到失败，请检查")
-
+                            result = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(int(time.time())) + "签到失败，请检查\n")
+                            notice.send(result)
             else:
-                print("未到签到时间")
-        else:
-            print("登录授权失败，请重新登录!")
+                print("登录授权失败，请重新登录!")
+    else:
+        print("未到签到时间")
