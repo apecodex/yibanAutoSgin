@@ -8,37 +8,7 @@
 """
 
 import time
-from email.mime.text import MIMEText
-from email.header import Header
-from smtplib import SMTP_SSL
 
-# 获取所有账号
-def readAccount() -> str:
-    with open("data/account.txt", encoding="utf-8") as f:
-        reason = f.read().splitlines()
-    return reason
-
-# 写入把签到的结果log.txt
-def log(message):
-    with open("data/log.txt", "a+", encoding="utf-8") as w:
-        w.write(message)
-
-# 获取位置签到数据
-def getReason():
-    with open("data/nightSign.txt", encoding="utf-8") as f:
-        reason = f.read().splitlines()
-    return reason
-
-# 获取表单数据
-def readTaskForm():
-    with open("data/taskForm.txt", encoding="utf-8") as r:
-        data = r.read().splitlines()
-    return data
-
-# 写入表单数据
-def writerTaskFrom(form_data):
-    with open("data/taskForm.txt", 'w') as w:
-        w.write(str(form_data).replace(" ", "").replace("'", "\""))
 
 def getTenAfter():
     now = int(time.time() + 600)
@@ -47,36 +17,6 @@ def getTenAfter():
     otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
     return otherStyleTime
 
-def send_mail(message):
-    try:
-        host_server = 'smtp.qq.com'
-        # 发件人的邮箱
-        sender_qq = 'xxx@qq.com'
-        # 邮箱的授权码
-        pwd = 'xxxxxxxxxxxxx'
-        # 发件人的邮箱
-        sender_qq_mail = 'xxx@qq.com'
-        # 收件人邮箱
-        receiver = 'xxx@qq.com'
-        # 邮件的正文内容
-        mail_content = message
-        # 邮件标题
-        mail_title = "易班 " + time.strftime("%Y-%m-%d", time.localtime(int(time.time()))) + " 签到情况"
-        # ssl登录
-        smtp = SMTP_SSL(host_server)
-        smtp.ehlo(host_server)
-        smtp.login(sender_qq, pwd)
-
-        msg = MIMEText(mail_content, "html", 'utf-8')
-        msg["Subject"] = Header(mail_title, 'utf-8')
-        msg["From"] = sender_qq_mail
-        msg["To"] = receiver
-        smtp.sendmail(sender_qq_mail, receiver, msg.as_string())
-        smtp.quit()
-        return True
-    except Exception as e:
-        print(e)
-        return False
 
 def html_format(date, postContext, url, signStr) -> str:
     html = """
@@ -115,6 +55,42 @@ def html_format(date, postContext, url, signStr) -> str:
         </html>
     """ % (date, postContext, url, url, signStr)
     return html
+
+
+# 获取时段
+def getTimePeriod() -> int:
+    def period(t) -> int:
+        return int(time.mktime(time.strptime(time.strftime("%Y-%m-%d {}".format(t), time.localtime(int(time.time()))), '%Y-%m-%d %H:%M:%S')))
+    nowTime = int(time.time())
+    if period("6:30:00") < nowTime <= period("9:00:00"):    # 晨检
+        return 1
+    elif period("12:00:00") < nowTime <= period("14:30:00"):    # 午检
+        return 2
+    elif period("19:30:00") < nowTime <= period("21:30:00"):    # 晚检
+        return 3
+    else:
+        return 0    # 未到时间
+
+
+# 通过数值得到时段
+def fromIntGetTimePeriod(num: int):
+    if num == 1:
+        return [
+            time.strftime("%Y-%m-%d 6:30:00", time.localtime(int(time.time()))),
+            time.strftime("%Y-%m-%d 9:00:00", time.localtime(int(time.time())))
+        ]
+    elif num == 2:
+        return [
+            time.strftime("%Y-%m-%d 12:00:00", time.localtime(int(time.time()))),
+            time.strftime("%Y-%m-%d 14:30:00", time.localtime(int(time.time())))
+        ]
+    elif num == 3:
+        return [
+            time.strftime("%Y-%m-%d 19:30:00", time.localtime(int(time.time()))),
+            time.strftime("%Y-%m-%d 21:30:00", time.localtime(int(time.time())))
+        ]
+    else:
+        return []
 
 # 根据当前时间判断晨检、午检、晚检
 def GenerateNowTime() -> str:
