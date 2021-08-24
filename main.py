@@ -35,7 +35,7 @@ for ac in config.account:
         if (login["response"]) != 100:
             print(login["message"])
         else:
-            notice = Notice(config.admin, config.account)
+            notice = Notice(config.admin, ac)
             auth = yb.auth()
             if auth["code"] == 0:
 
