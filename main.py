@@ -8,12 +8,24 @@
 """
 
 import json
+import os
 import time
 import util
 from yiban import Yiban
 import config
 from notice import Notice
 
+# ===========================================================
+# Github actions | git clone使用请注释
+try:
+    config.account[0]["mobile"] = os.environ["yb_mobile"]
+    config.account[0]["password"] = os.environ["yb_password"]
+    config.account[0]["mail"] = os.environ["yb_mail"]
+    config.account[0]["pushToken"] = os.environ["yb_pushToken"]
+    config.account[0]["notice"] = os.environ["yb_notice"]
+except KeyError:
+    pass
+# # ===========================================================
 
 for ac in config.account:
     yb = Yiban(ac.get("mobile"), ac.get("password"))
