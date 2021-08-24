@@ -16,7 +16,7 @@ import config
 from notice import Notice
 
 # ===========================================================
-# Github actions | git clone使用请注释
+# Github actions 使用，本地使用请注释
 try:
     config.account[0]["mobile"] = os.environ["YB_MOBILE"]
     config.account[0]["password"] = os.environ["YB_PASSWORD"]
@@ -35,8 +35,10 @@ for ac in config.account:
         if (login["response"]) != 100:
             print(login["message"])
         else:
+            notice = Notice(config.admin, config.account)
             auth = yb.auth()
             if auth["code"] == 0:
+
                 timePeriod = util.fromIntGetTimePeriod(nowPeriod)
                 now_task = yb.getUncompletedListTime(timePeriod[0], timePeriod[1])
                 if not len(now_task["data"]):
@@ -53,8 +55,6 @@ for ac in config.account:
                             {"label": "发布人", "value": detail["data"]["PubPersonName"]}
                         ]
                     }
-
-                    notice = Notice(config.admin, config.account)
                     sb_result = yb.submitApply(config.tasks[nowPeriod - 1], extend)
                     if nowPeriod != 3:
                         if sb_result["code"] == 0:
@@ -87,5 +87,6 @@ for ac in config.account:
                             notice.send(result)
             else:
                 print("登录授权失败，请重新登录!")
+                notice.send(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(int(time.time())) + "登录授权失败，请重新登录\n"))
     else:
         print("未到签到时间")
