@@ -27,12 +27,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: sginIn
-      run: |
-        python ./main.py
       env:
         YB_MOBILE: ${{ secrets.YB_MOBILE }}
         YB_PASSWORD: ${{ secrets.YB_PASSWORD }}
         YB_MAIL: ${{ secrets.YB_MAIL }}
         YB_PUSHTOKEN: ${{ secrets.YB_PUSHTOKEN }}
         YB_NOTICE: ${{ secrets.YB_NOTICE }}
+    - name: sginIn
+      run: |
+        python ./main.py
+
