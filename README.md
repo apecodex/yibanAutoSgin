@@ -42,7 +42,7 @@ account = [
         "password": "",    # 易班密码
         "mail": "",        # 接收的邮箱地址
         "pushToken": "",   # pushPlus的Token
-        "notice": ""       # 接收通知的方式
+        "notice": ""       # 接收通知的方式 (local：本地记录，mail：邮件通知，pp：Push Plus推送)，默认local
     }
 ]
 ```
