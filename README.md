@@ -71,7 +71,7 @@ python3.8
 ### 运行方式
 
 ```shell
-git clone https://github.com/rookiesmile/yibanAutoSgin.git
+git clone https://ghproxy.com/https://github.com/rookiesmile/yibanAutoSgin.git
 cd yibanAutoSgin
 python main.py
 ```
