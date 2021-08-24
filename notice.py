@@ -91,8 +91,3 @@ class Notice:
     def saveLocal(message):
         with open("data/result.log", mode="a+", encoding="utf-8") as w:
             w.write(message)
-
-
-if __name__ == '__main__':
-    n = Notice(config.admin, config.account[0])
-    n.send("hello")
