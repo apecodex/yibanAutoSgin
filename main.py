@@ -38,7 +38,6 @@ for ac in config.account:
             notice = Notice(config.admin, ac)
             auth = yb.auth()
             if auth["code"] == 0:
-
                 timePeriod = util.fromIntGetTimePeriod(nowPeriod)
                 now_task = yb.getUncompletedListTime(timePeriod[0], timePeriod[1])
                 if not len(now_task["data"]):
@@ -69,7 +68,7 @@ for ac in config.account:
                         # 位置签到
                         yb.photoRequirements()
                         yb.deviceState()
-                        yb.sginPostion()
+                        yb.signPostion()
                         ns_result = yb.nightAttendance(config.address)
                         if sb_result["code"] == 0 and ns_result["code"] == 0:
                             share_url = yb.getShareUrl(sb_result["data"])["data"]["uri"]
