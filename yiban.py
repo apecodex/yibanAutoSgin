@@ -53,22 +53,22 @@ def encryptPassword(pwd):
 
 class Yiban:
     CSRF = "64b5c616dc98779ee59733e63de00dd5"
-    COOKIES = {"csrf_token": CSRF}
-    HEADERS = {"Origin": "'https://m.yiban.cn", 'AppVersion': '5.0.1', "User-Agent": "YiBan/5.0.1"}
-    EMAIL = {}
+    COOKIES = {}
+    HEADERS = {}
 
     def __init__(self, mobile, password):
         self.mobile = mobile
         self.password = password
         self.session = requests.session()
         self.name = ""
+        self.HEADERS = {"Origin": "'https://m.yiban.cn", 'AppVersion': '5.0.1', "User-Agent": "YiBan/5.0.1"}
+        self.COOKIES = {"csrf_token": self.CSRF}
 
     def request(self, url, method="get", params=None, cookies=None):
         if method == "get":
             response = self.session.get(url=url, timeout=10, headers=self.HEADERS, params=params, cookies=cookies)
         else:
             response = self.session.post(url=url, timeout=10, headers=self.HEADERS, data=params, cookies=cookies)
-
         return response.json()
 
     def login(self):
@@ -155,32 +155,7 @@ class Yiban:
         self.Title = response['data']["Title"]
         self.PubOrgName = response["data"]["PubOrgName"]
         self.PubPersonName = response["data"]["PubPersonName"]
-        print("WFID: " + self.WFId)
         return response
-
-    def getForm(self):
-        """
-        首次使用,需要创建提交表单用的数据
-        此方法是用来创建表单数据的
-        *** 已作废！ ***
-        :return:
-        """
-        form_data = {}
-        response = self.request("https://api.uyiban.com/workFlow/c/my/form/%s?CSRF=%s" % (self.WFId, self.CSRF),
-                                cookies=self.COOKIES)
-        for i in response["data"]["Form"]:
-            if i["component"] == "Radio":
-                print(i["props"]["label"] + ": " + i["props"]["extra"])
-                for option in i["props"]["options"]:
-                    print(option)
-                o = input("选择: ")
-                form_data[i["id"]] = i["props"]["options"][int(o) - 1]
-            elif i["component"] == "Input":
-                o = input(i["props"]["label"] + ": " + i["props"]["placeholder"] + ": ")
-                form_data[i["id"]] = o
-            else:
-                pass
-        util.writerTaskFrom(form_data)
 
     def getFormapi(self) -> json:
         """
@@ -188,7 +163,6 @@ class Yiban:
         此方法是用来创建表单数据的
         :return:
         """
-        form_data = {}
         response = self.request("https://api.uyiban.com/workFlow/c/my/form/%s?CSRF=%s" % (self.WFId, self.CSRF),
                                 cookies=self.COOKIES)
         return response
@@ -247,7 +221,7 @@ class Yiban:
         return self.request(url="https://api.uyiban.com/nightAttendance/student/index/deviceState?CSRF=" + self.CSRF,
                             cookies=self.COOKIES)
 
-    def sginPostion(self):
+    def signPostion(self):
         """
         晚点名签到所需
         :return:
