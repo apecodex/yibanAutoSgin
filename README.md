@@ -80,6 +80,20 @@ python main.py
 2. 租服务器
 - - -
 
+### 我的crontab配置(供参考)
+
+```shell
+40 6 * * * python3 /root/Documents/Python/yibanAutoSgin/main.py
+0 7 * * * python3 /root/Documents/Python/yibanAutoSgin/main.py
+30 7 * * * python3 /root/Documents/Python/yibanAutoSgin/main.py
+10 12 * * * python3 /root/Documents/Python/yibanAutoSgin/main.py
+30 12 * * * python3 /root/Documents/Python/yibanAutoSgin/main.py
+0 13 * * * python3 /root/Documents/Python/yibanAutoSgin/main.py
+40 19 * * * python3 /root/Documents/Python/yibanAutoSgin/main.py
+0 20 * * * python3 /root/Documents/Python/yibanAutoSgin/main.py
+30 20 * * * python3 /root/Documents/Python/yibanAutoSgin/main.py
+```
+
 ### 特别说明
 * 自动签到自己琢磨，本脚本只提供签到功能
 * 只适合本校使用，其他学校自行抓包
