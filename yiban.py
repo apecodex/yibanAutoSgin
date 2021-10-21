@@ -9,10 +9,9 @@
 import json
 import re
 import sys
-import time
 import os
-import util
 import base64
+from crypter import aes_encrypt
 
 try:
     import requests
@@ -53,6 +52,8 @@ def encryptPassword(pwd):
 
 class Yiban:
     CSRF = "64b5c616dc98779ee59733e63de00dd5"
+    AES_KEY = '2knV5VGRTScU7pOq'
+    AES_IV = 'UmNWaNtM0PUdtFCs'
     COOKIES = {}
     HEADERS = {}
 
@@ -191,17 +192,23 @@ class Yiban:
         :return: 表单url
         """
         params = {
-            "data": json.dumps(data, ensure_ascii=False),
-            "extend": json.dumps(extend, ensure_ascii=False)
+            "Data": json.dumps(data, ensure_ascii=False),
+            "Extend": json.dumps(extend, ensure_ascii=False),
+            "WFId": self.WFId
         }
+        params = json.dumps(params, ensure_ascii=False)
         return self.request(
-            "https://api.uyiban.com/workFlow/c/my/apply/%s?CSRF=%s" % (self.WFId, self.CSRF), method="post",
-            params=params,
+            "https://api.uyiban.com/workFlow/c/my/apply/?CSRF=%s" % (self.CSRF), method="post",
+            params={'Str': aes_encrypt(self.AES_KEY, self.AES_IV, params)},
             cookies=self.COOKIES)
 
-    def getShareUrl(self, initiateId) -> json:
+    def getShareUrl(self, key) -> json:
+        """
+        待更新....
+        Key是随机生成的
+        """
         return self.request(
-            "https://api.uyiban.com/workFlow/c/work/share?InitiateId=%s&CSRF=%s" % (initiateId, self.CSRF),
+            "https://app.uyiban.com/workFlow/client/#/share?Key=%s" % key,
             cookies=self.COOKIES)
 
     def photoRequirements(self):
