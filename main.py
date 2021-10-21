@@ -40,7 +40,6 @@ for ac in config.account:
             if auth["code"] == 0:
                 timePeriod = util.fromIntGetTimePeriod(nowPeriod)
                 now_task = yb.getUncompletedListTime(timePeriod[0], timePeriod[1])
-                print(now_task)
                 if not len(now_task["data"]):
                     print("没有找到要提交的表单")
                 else:
