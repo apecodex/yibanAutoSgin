@@ -30,14 +30,14 @@ except KeyError:
 for ac in config.account:
     yb = Yiban(ac.get("mobile"), ac.get("password"))
     nowPeriod = util.getTimePeriod()  # 获取签到时段数值
-    if nowPeriod == 0:
+    if nowPeriod != 0:
         login = yb.login()
         if (login["response"]) != 100:
             print(login["message"])
         else:
             notice = Notice(config.admin, ac)
             auth = yb.auth()
-            if auth["code"] != 0:
+            if auth["code"] == 0:
                 timePeriod = util.fromIntGetTimePeriod(nowPeriod)
                 now_task = yb.getUncompletedListTime(timePeriod[0], timePeriod[1])
                 print(now_task)
