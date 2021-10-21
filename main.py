@@ -30,16 +30,17 @@ except KeyError:
 for ac in config.account:
     yb = Yiban(ac.get("mobile"), ac.get("password"))
     nowPeriod = util.getTimePeriod()  # 获取签到时段数值
-    if nowPeriod != 0:
+    if nowPeriod == 0:
         login = yb.login()
         if (login["response"]) != 100:
             print(login["message"])
         else:
             notice = Notice(config.admin, ac)
             auth = yb.auth()
-            if auth["code"] == 0:
+            if auth["code"] != 0:
                 timePeriod = util.fromIntGetTimePeriod(nowPeriod)
                 now_task = yb.getUncompletedListTime(timePeriod[0], timePeriod[1])
+                print(now_task)
                 if not len(now_task["data"]):
                     print("没有找到要提交的表单")
                 else:
@@ -57,11 +58,12 @@ for ac in config.account:
                     sb_result = yb.submitApply(config.tasks[nowPeriod - 1], extend)
                     if nowPeriod != 3:
                         if sb_result["code"] == 0:
-                            share_url = yb.getShareUrl(sb_result["data"])["data"]["uri"]
-                            result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) + " 表单提交成功 url: " + share_url + "\n"
+                            # share_url = yb.getShareUrl(sb_result["data"])
+                            # result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) + " 表单提交成功 url: " + share_url + "\n"
+                            result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) + " 表单提交成功\n"
                             notice.send(result)
                         else:
-                            result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time())) + "表单提交失败！请检查\n")
+                            result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) + "表单提交失败！请检查\n"
                             notice.send(time.strftime(result))
                             Notice.log(result)
                     else:
@@ -71,12 +73,14 @@ for ac in config.account:
                         yb.signPostion()
                         ns_result = yb.nightAttendance(config.address)
                         if sb_result["code"] == 0 and ns_result["code"] == 0:
-                            share_url = yb.getShareUrl(sb_result["data"])["data"]["uri"]
-                            result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) + " 表单和位置签到提交成功 url: " + share_url + " 位置: " + json.loads(config.address)["Address"] + "\n"
+                            # share_url = yb.getShareUrl(sb_result["data"])
+                            # result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) + " 表单和位置签到提交成功 url: " + share_url + " 位置: " + json.loads(config.address)["Address"] + "\n"
+                            result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) + " 表单和位置签到提交成功 位置: " + json.loads(config.address)["Address"] + "\n"
                             notice.send(result)
                         elif sb_result["code"] == 0 and ns_result["code"] != 0:
-                            share_url = yb.getShareUrl(sb_result["data"])["data"]["uri"]
-                            result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) +" 表单提交成功 url: " + share_url + "\n"
+                            # share_url = yb.getShareUrl(sb_result["data"])
+                            # result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) +" 表单提交成功 url: " + share_url + "\n"
+                            result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) +" 表单提交成功 \n"
                             notice.send(result)
                         elif sb_result["code"] != 0 and ns_result["code"] == 0:
                             result = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(time.time()))) +" 位置: " + json.loads(config.address)["Address"] + "\n"
