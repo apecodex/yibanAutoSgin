@@ -84,4 +84,4 @@ tasks = [
 ]
 
 # 地址
-address = '{"Reason":"","AttachmentFileName":"","LngLat":"102.449018,24.875743","Address":"云南省 昆明市 安宁市县街街道昆明冶金高等专科学校-教学大楼 "}'
+address = '{"Reason":"","AttachmentFileName":"","LngLat":"102.449018,24.875743","Address":"xxx省 xxx市 xxx学校 "}'
